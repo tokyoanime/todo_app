@@ -11,6 +11,14 @@ class Api::V1::TodoItemsController < ApplicationController
   end
 
   def show
+    # show error if user is trying to access todo item that is not his/her
+    if authorized?
+      respond_to do |format|
+        format.json { render :show }
+      end
+    else
+      handle_unauthorized
+    end
   end
 
   def create

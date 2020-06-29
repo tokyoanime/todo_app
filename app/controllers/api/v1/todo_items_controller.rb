@@ -29,4 +29,12 @@ class Api::V1::TodoItemsController < ApplicationController
   def authorized?
     @todo_item.user == current_user
   end
+
+  def handle_unauthorized
+    unless authorized?
+      respond_to do |format|
+        format.json { render :unauthorized, status: 401 }
+      end
+    end
+  end
 end

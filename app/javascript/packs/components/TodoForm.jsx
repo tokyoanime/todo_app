@@ -24,9 +24,10 @@ export default class TodoForm extends Component {
       .then((res) => {
         const todoItem = res.data;
         this.props.createTodoItem(todoItem);
+        this.props.clearErrors();
       })
       .catch((err) => {
-        console.error(err);
+        this.props.handleErrors(err);
       });
 
     e.target.reset();
@@ -41,7 +42,7 @@ export default class TodoForm extends Component {
               type='text'
               name='title'
               ref={this.titleRef}
-              required
+              // required
               className='form-control'
               id='title'
               placeholder='Write your todo item here ...'
@@ -60,4 +61,6 @@ export default class TodoForm extends Component {
 
 TodoItem.propTypes = {
   createTodoItem: PropTypes.func.isRequired,
+  handleErrors: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
 };

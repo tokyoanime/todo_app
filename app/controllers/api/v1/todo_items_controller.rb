@@ -6,7 +6,8 @@ class Api::V1::TodoItemsController < ApplicationController
   before_action :set_todo_item, only: [:show, :edit, :update, :destroy]
 
   def index
-    @todo_items = TodoItem.all
+    # populate all todo_items for current user
+    @todo_items = current_user.todo_items.all
   end
 
   def show

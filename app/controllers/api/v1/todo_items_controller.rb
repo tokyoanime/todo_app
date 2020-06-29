@@ -42,7 +42,7 @@ class Api::V1::TodoItemsController < ApplicationController
         if @todo_item.update(todo_item_params)
           format.json { render :show, status: :ok, location: api_v1_todo_item_path(@todo_item) }
         else
-          format.json { render json: @todo_item.errors, status: :unprocessable_entity }
+          format.json { render json: @todo_item.errors.full_messages, status: :unprocessable_entity }
         end
       end
     else

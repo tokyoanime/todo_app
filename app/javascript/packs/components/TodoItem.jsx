@@ -61,7 +61,13 @@ export default class TodoItem extends Component {
   render() {
     const { todoItem } = this.props;
     return (
-      <tr className={`${this.state.complete ? 'table-light' : ''}`}>
+      <tr
+        className={`${
+          this.state.complete && this.props.hideCompletedTodoItems
+            ? `d-none`
+            : ''
+        } ${this.state.complete ? 'table-light' : ''}`}
+      >
         <td>
           <svg
             className={`bi bi-check-circle ${
@@ -129,4 +135,5 @@ export default class TodoItem extends Component {
 TodoItem.PropTypes = {
   todoItem: PropTypes.object.isRequired,
   getTodoItems: PropTypes.func.isRequired,
+  hideCompletedTodoItems: PropTypes.bool.isRequired,
 };

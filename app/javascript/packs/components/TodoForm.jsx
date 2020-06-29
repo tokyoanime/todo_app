@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import setAxiosHeaders from './AxiosHeaders';
 import TodoItem from './TodoItem';
 
 export default class TodoForm extends Component {
@@ -12,6 +13,7 @@ export default class TodoForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    setAxiosHeaders();
     axios
       .post('/api/v1/todo_items', {
         todo_item: {
@@ -56,6 +58,6 @@ export default class TodoForm extends Component {
   }
 }
 
-TodoItem.PropTypes = {
+TodoItem.propTypes = {
   createTodoItem: PropTypes.func.isRequired,
 };

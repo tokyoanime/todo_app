@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import setAxiosHeaders from './AxiosHeaders';
+import _ from 'lodash';
 
 export default class TodoItem extends Component {
   constructor(props) {
@@ -12,6 +13,11 @@ export default class TodoItem extends Component {
 
     this.handleDelete = this.handleDelete.bind(this);
     this.path = `/api/v1/todo_items/${this.props.todoItem.id}`;
+
+    this.handleChange = this.handleChange.bind(this);
+    this.updateTodoItem = this.updateTodoItem.bind(this);
+    this.inputRef = React.createRef();
+    this.completedRef = React.createRef();
   }
 
   handleDelete() {
@@ -28,6 +34,29 @@ export default class TodoItem extends Component {
         });
     }
   }
+
+  handleChange() {
+    this.setState({
+      complete: this.completedRef.current.checked,
+    });
+
+    this.updateTodoItem();
+  }
+
+  updateTodoItem = _.debounce(() => {
+    setAxiosHeaders();
+    axios
+      .put(this.path, {
+        todo_item: {
+          title: this.inputRef.current.value,
+          complete: this.completedRef.current.checked,
+        },
+      })
+      .then((res) => {})
+      .catch((err) => {
+        console.error(err);
+      });
+  }, 1000);
 
   render() {
     const { todoItem } = this.props;
@@ -61,6 +90,8 @@ export default class TodoItem extends Component {
             type='text'
             defaultValue={todoItem.title}
             disabled={this.state.complete}
+            onChange={this.handleChange}
+            ref={this.inputRef}
             className='form-control'
             id={`todoItem__title-${todoItem.id}`}
           />
@@ -71,6 +102,8 @@ export default class TodoItem extends Component {
               type='boolean'
               defaultChecked={this.state.complete}
               type='checkbox'
+              onChange={this.handleChange}
+              ref={this.completedRef}
               className='form-check-input'
               id={`complete-${todoItem.id}`}
             />

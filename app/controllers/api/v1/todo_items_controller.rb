@@ -22,6 +22,18 @@ class Api::V1::TodoItemsController < ApplicationController
   end
 
   def create
+    @todo_item = current_user.todo_items.build(todo_item_params)
+    if authorized?
+      respond_to do |format|
+        if @todo_item.save
+          format.json { render :show, status: :created, location: api_v1_todo_item_path(@todo_item)}
+        else
+          format.json { render json: @todo_item.errors.full_messages, status: :unprocessable_entity}
+        end
+      end
+    else
+      handle_unauthorized
+    end
   end
 
   def update
@@ -45,5 +57,9 @@ class Api::V1::TodoItemsController < ApplicationController
         format.json { render :unauthorized, status: 401 }
       end
     end
+  end
+
+  def todo_item_params
+    params.require(:todo_item).permit(:title, :complete)
   end
 end

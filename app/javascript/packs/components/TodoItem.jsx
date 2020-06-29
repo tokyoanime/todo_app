@@ -52,9 +52,11 @@ export default class TodoItem extends Component {
           complete: this.completedRef.current.checked,
         },
       })
-      .then((res) => {})
+      .then((res) => {
+        this.props.clearErrors();
+      })
       .catch((err) => {
-        console.error(err);
+        this.props.handleErrors(err);
       });
   }, 1000);
 
@@ -136,4 +138,5 @@ TodoItem.PropTypes = {
   todoItem: PropTypes.object.isRequired,
   getTodoItems: PropTypes.func.isRequired,
   hideCompletedTodoItems: PropTypes.bool.isRequired,
+  clearErrors: PropTypes.func.isRequired,
 };
